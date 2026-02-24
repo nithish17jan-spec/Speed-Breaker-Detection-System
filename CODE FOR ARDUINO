@@ -1,0 +1,43 @@
+#define trigPin 10
+#define echoPin 11
+#define enA 9
+#define in1 8
+#define in2 7
+
+long duration;
+int distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+
+  pinMode(enA, OUTPUT);
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+
+  // Motor direction
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+}
+
+void loop() {
+  // Trigger ultrasonic sensor
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Read echo time
+  duration = pulseIn(echoPin, HIGH);
+  distance = duration * 0.034 / 2;
+
+  // Speed control logic
+  if (distance > 0 && distance < 20) {
+    analogWrite(enA, 80);    // Slow speed (speed breaker detected)
+  } else {
+    analogWrite(enA, 200);   // Normal speed
+  }
+
+  delay(100);
+}
